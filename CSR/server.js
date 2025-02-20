@@ -22,7 +22,7 @@ app.post('/generate-csr', (req, res) => {
     let country= "CA";
     
     // Generate CSR and Private Key
-    const opensslCommand = `openssl req -new -newkey rsa:${keySize} -nodes -keyout ./objs/private.key -out ./objs/csr.pem -subj "/C=${country}/ST=${state}/L=${city}/O=${organization}/OU=${organizationalUnit}/CN=${commonName}/emailAddress=${email}"`;
+    const opensslCommand = `openssl req -new -newkey rsa:${keySize} -nodes -keyout /app/private.key -out /app/csr.pem -subj "/C=${country}/ST=${state}/L=${city}/O=${organization}/OU=${organizationalUnit}/CN=${commonName}/emailAddress=${email}"`;
     
     exec(opensslCommand, (error, stdout, stderr) => {
         if (error) {
@@ -31,8 +31,8 @@ app.post('/generate-csr', (req, res) => {
         
         // Read generated files
         const fs = require('fs');
-        const privateKey = fs.readFileSync('./objs/private.key', 'utf8');
-        const csr = fs.readFileSync('./objs/csr.pem', 'utf8');
+        const privateKey = fs.readFileSync('/app/private.key', 'utf8');
+        const csr = fs.readFileSync('/app/csr.pem', 'utf8');
         
         // Cleanup files
         //fs.unlinkSync('private.key');
