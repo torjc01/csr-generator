@@ -1,5 +1,5 @@
 FROM node
-USER node
+# USER node
 WORKDIR /app
 COPY package.json /app
 RUN npm install
