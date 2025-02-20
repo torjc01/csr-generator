@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -20,7 +22,7 @@ app.post('/generate-csr', (req, res) => {
     let country= "CA";
     
     // Generate CSR and Private Key
-    const opensslCommand = `openssl req -new -newkey rsa:${keySize} -nodes -keyout private.key -out csr.pem -subj "/C=${country}/ST=${state}/L=${city}/O=${organization}/OU=${organizationalUnit}/CN=${commonName}/emailAddress=${email}"`;
+    const opensslCommand = `openssl req -new -newkey rsa:${keySize} -nodes -keyout ./objs/private.key -out ./objs/csr.pem -subj "/C=${country}/ST=${state}/L=${city}/O=${organization}/OU=${organizationalUnit}/CN=${commonName}/emailAddress=${email}"`;
     
     exec(opensslCommand, (error, stdout, stderr) => {
         if (error) {
@@ -29,12 +31,12 @@ app.post('/generate-csr', (req, res) => {
         
         // Read generated files
         const fs = require('fs');
-        const privateKey = fs.readFileSync('private.key', 'utf8');
-        const csr = fs.readFileSync('csr.pem', 'utf8');
+        const privateKey = fs.readFileSync('./objs/private.key', 'utf8');
+        const csr = fs.readFileSync('./objs/csr.pem', 'utf8');
         
         // Cleanup files
-        fs.unlinkSync('private.key');
-        fs.unlinkSync('csr.pem');
+        //fs.unlinkSync('private.key');
+        //fs.unlinkSync('csr.pem');
         
         res.render('result', { privateKey, csr });
     });

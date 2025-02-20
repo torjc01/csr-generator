@@ -1,6 +1,8 @@
 FROM node
+USER node
 WORKDIR /app
 COPY package.json /app
 RUN npm install
+RUN mkdir -p /app/objs && chown -R node:node /app/objs
 COPY . /app
 CMD ["node","server.js"]
