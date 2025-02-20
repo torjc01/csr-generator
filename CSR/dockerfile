@@ -2,6 +2,7 @@ FROM node
 USER node
 WORKDIR /app
 COPY package.json /app
+RUN chown -R node:node /app
 RUN npm install
 COPY . /app
 CMD ["node","server.js"]
