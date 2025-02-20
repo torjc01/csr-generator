@@ -1,0 +1,17 @@
+# Fichiers liés docker
+Dockerfile
+docker.env
+.dockerignore
+
+# Fichiers liés node et npm
+node_modules
+dist
+npm-debug.logs
+
+# Fichiers liés base de données
+data
+
+# Autres fichiers
+.git
+.env
+.DS_Store

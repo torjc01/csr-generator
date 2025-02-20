@@ -1,0 +1,107 @@
+.header-bg {
+    background-image: url('/images/header-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 200px;
+    width: 100%;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+pre {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+}
+
+/* Add space between form and footer */
+.container {
+    padding-bottom: 80px; /* Creates space for footer */
+}
+
+/* Footer styling */
+.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background-color: #673ddb;
+    border-top: 1px solid #dee2e6;
+    margin-top: auto; /* Pushes footer to bottom */
+}
+
+/* For result page spacing */
+.result-container {
+    min-height: calc(100vh - 400px);
+    padding-bottom: 80px;
+}
+
+.btn-download {
+    transition: transform 0.2s ease-in-out;
+}
+
+.btn-download:hover {
+    transform: translateY(-2px);
+}
+
+pre {
+    position: relative;
+    margin-top: 40px;
+}
+
+.title-xroad{
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #673ddb;
+}
+
+.text-xroad{
+    font-size: 20px;
+    font-weight: normal;
+    margin-top: 20px;
+    color: #673ddb;
+}
+
+.header-bg {
+    background-image: url('/images/header-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+    width: 100%;
+    position: relative;
+}
+
+/* Overlay sombre pour améliorer la lisibilité */
+.header-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Positionnement du contenu par-dessus l'overlay */
+.header-bg > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Style des liens de navigation */
+.header-bg nav a {
+    transition: opacity 0.3s ease;
+}
+
+.header-bg nav a:hover {
+    opacity: 0.8;
+    text-decoration: underline !important;
+}

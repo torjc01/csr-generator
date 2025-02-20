@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  csr-generator:
+    container_name: csr-generator
+    image : csr-generator
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    ports:
+      - 3000:3000
+    networks: 
+      - csr-network
+    restart: unless-stopped
+    
+networks:
+  csr-network:
