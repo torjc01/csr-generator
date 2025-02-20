@@ -1,0 +1,138 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: csr-controller
+  annotations:
+    description: Site Web qui permet la création d'une demande de generation de certificat numérique pour l'ICP d'X-Road. 
+    tags: cqen, experimentation, x-road, icp, pki
+objects:
+
+# CSR-controller
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: csr-controller
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    annotations:
+      app.openshift.io/vcs-uri: https://github.com/torjc01/csr-generator.git
+      template.alpha.openshift.io/wait-for-ready: "true"
+    labels:
+      app: csr-controller
+    name: csr-controller
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: csr-controller:latest
+    source:
+      contextDir: CSR
+      git:
+        uri: https://github.com/torjc01/csr-generator.git
+        ref: prod
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: dockerfile
+      type: Docker
+    triggers:
+      - github:
+          secretReference:
+            name: csr-build
+        type: GitHub
+      - type: ConfigChange
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: csr-controller
+    labels:
+      app: csr-controller
+      app.kubernetes.io/part-of: CSR
+  spec:
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 600
+        maxUnavailable: 25%
+        maxSurge: 25%
+      resources: {}
+      activeDeadlineSeconds: 21600
+    triggers:
+      - github:
+          secretReference:
+            name: csr-build
+        type: GitHub
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - csr-controller
+          from:
+            kind: ImageStreamTag
+            name: "csr-controller:latest"
+    replicas: 1
+    revisionHistoryLimit: 10
+    test: false
+    selector:
+      app: csr-controller
+    template:
+      metadata:
+        labels:
+          app: csr-controller
+      spec:
+        containers:
+          - name: csr-controller
+            image: " "
+            ports:
+              - containerPort: 3000
+                protocol: TCP
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            imagePullPolicy: Always
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: csr-controller
+  spec:
+    selector:
+      app: csr-controller
+    ports:
+      - name: "3000"
+        protocol: TCP
+        port: 3000
+        targetPort: 3000
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: csr-controller
+  spec:
+    host: csr-controller.apps.exp.openshift.cqen.ca
+    to:
+      kind: Service
+      name: csr-controller
+      weight: 100
+    port:
+      targetPort: 3000
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: None
+    wildcardPolicy: None
+  status:
+    ingress:
+      - host: csr-controller.apps.exp.openshift.cqen.ca 
+        routerName: default
+        conditions:
+          - type: Admitted
+            status: "True"
+        wildcardPolicy: None
+        routerCanonicalHostname: apps.exp.openshift.cqen.ca

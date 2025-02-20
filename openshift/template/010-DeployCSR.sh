@@ -1,0 +1,1 @@
+oc process -f ./csrgen.yaml | oc apply -f -

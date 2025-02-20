@@ -35,11 +35,31 @@
             <!--h2 class="h4 mb-3">📋 Guide d'utilisation</h2-->
             
             <div class="mb-4">
-                <p class="text-xroad">Qu'est-ce qu'une CSR ?</p>
-                <p>Une <span class="text-primary">Certificate Signing Request (CSR)</span> est un fichier contenant vos informations cryptographiques, nécessaire à la création d'un certificat SSL/TLS. 
-                    Elle permet à une Autorité de Certification X-Road (CA) de générer un certificat numérique pour sécuriser vos serveurs de sécurité et vous applications.</p>
+                <p class="title-xroad">Qu'est-ce qu'une CSR ?</p>
+
+                <p class="lead">La première étape d’une demande d’émission de certificat numérique est la génération de la demande de signature de certificats
+                    (Certificate Signing Request, ou CSR). </p>
+    
+                <p class="lead">La CSR est un fichier contenant vos informations cryptographiques, nécessaire à la création d'un certificat SSL/TLS. 
+                    Elle permet à une Autorité de Certification X-Road (CA) de générer un certificat numérique pour sécuriser vos serveurs de sécurité et vous applications. 
+                    Vous aurez aussi généré un fichier de clé privée, qui vous devez protéger et ne pas partager.</p>
+
+                <p class="lead">Merci de remplir les champs ci-dessous pour générer votre CSR :</p>
+
+                <ol>
+                    <li>Renseignez tous les champs obligatoires (<span class="text-danger">*</span>).</li>
+                    <li>Sélectionnez le <span class="text-primary">profil</span> correspondant à l'usage prévu de votre certificat.</li>
+                    <li>Choisissez la <span class="text-primary">taille de clé</span> (2048 bits pour un usage standard, 4096 bits pour une sécurité renforcée).</li>
+                    <li>Renseignez l'identificateur <span class="text-primary">Common Name (FQDN)</span> de votre serveur de sécurité.</li>
+                    <li>Cliquez sur le bouton <span class="text-primary">Générer CSR</span> pour obtenir instantanément les fichiers de la <b>CSR (csr.pem)</b> et de la <b>clé privée (private.key)</b>.</li>
+                
+                </ol>
+
+                <div class="alert alert-warning mb-0">
+                    <p class="mb-0">⚠️ <strong>Attention :</strong> La clé privée générée ne doit JAMAIS être partagée et ne sera pas sauvegardée par nos services. Sans elle, votre certificat deviendra inutilisable.</p>
+                </div>
             </div>
-        
+                    
             <!-- div class="mb-4">
                 <p class="fw-bold">Comment utiliser ce formulaire :</p>
                 <p>1️⃣ Renseignez tous les champs obligatoires (<span class="text-danger">*</span>) avec vos informations officielles.<br>
@@ -102,19 +122,17 @@
                 <div class="col-12">
                     <label class="form-label">Pays (code à 2 lettres)*</label>
                     <input type="text" class="form-control" name="country" maxlength="2" required value="CA">
-                </div -->
+                </div 
                 
                 <div class="col-12">
                     <label class="form-label text-xroad">Adresse courriel</label>
                     <input type="email" class="form-control" name="email">
-                </div>
+                </div>-->
 
-                <div class="alert alert-warning mb-0">
-                    <p class="mb-0">⚠️ <strong>Attention :</strong> La clé privée générée ne doit JAMAIS être partagée et ne sera pas sauvegardée par nos services. Sans elle, votre certificat deviendra inutilisable.</p>
-                </div>
+                
 
                 <div class="col-12 mt-4 mb-5">  <!-- Added mb-5 class for bottom margin -->
-                    <button type="submit" class="btn btn-primary btn-lg w-100">Générer la CSR</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Générer CSR</button>
                 </div>
             </div>
             

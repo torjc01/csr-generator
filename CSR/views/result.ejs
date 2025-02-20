@@ -31,7 +31,25 @@
 </head>
 <body>
     
-    <header class="header-bg" ></header>
+    <header class="header-bg position-relative">
+        <!-- Barre de navigation -->
+        <nav class="container pt-3">
+            <div class="d-flex justify-content-end gap-4">
+                <a href="https://csr-controller.apps.exp.openshift.cqen.ca" class="text-white text-decoration-none">Accueil</a>
+                <a href="https://x-road.global/documentation" class="text-white text-decoration-none">Documentation</a>
+                <a href="https://x-road.global/downloads" class="text-white text-decoration-none">Téléchargements</a>
+                <a href="https://x-road.global/support" class="text-white text-decoration-none">Support</a>
+            </div>
+        </nav>
+
+        <!-- Titre central -->
+        <div class="position-absolute top-50 start-50 translate-middle text-center">
+            <h1 class="display-4 fw-bold text-white mb-4" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                Génération CSR du X-Road
+            </h1>
+            <p class="lead text-white opacity-75">Formulaire de génération de demandes de certificats</p>
+        </div>
+    </header>
 
     <div class="container mt-5">
         <h1 class="mb-4 title-xroad" >Votre CSR et clé privée </h1>
