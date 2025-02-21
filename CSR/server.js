@@ -12,7 +12,6 @@ app.set('view engine', 'ejs');
 // Routes
 app.get('/', (req, res) => res.render('index'));
 app.post('/generate-csr', (req, res) => {
-    // const { commonName, organization, organizationalUnit, city, state, country, email, keySize, profile } = req.body;
     const { commonName, email, keySize, profile } = req.body;
 
     let organization = "Centre Quebecois d'Excellence Numerique";
@@ -35,8 +34,8 @@ app.post('/generate-csr', (req, res) => {
         const csr = fs.readFileSync('/app/csr.pem', 'utf8');
         
         // Cleanup files
-        //fs.unlinkSync('private.key');
-        //fs.unlinkSync('csr.pem');
+        fs.unlinkSync('/app/private.key');
+        fs.unlinkSync('/app/csr.pem');
         
         res.render('result', { privateKey, csr });
     });
