@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: csr-controller
+  name: ${APP_NAME}
   annotations:
     description: Site Web qui permet la création d'une demande de generation de certificat numérique pour l'ICP d'X-Road. 
     tags: cqen, experimentation, x-road, icp, pki
@@ -11,26 +11,29 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: csr-controller
+    name: ${APP_NAME}
+    labels:
+      app.kubernetes.io/part-of: ${APP_GROUP}
 - kind: BuildConfig
   apiVersion: v1
   metadata:
     annotations:
-      app.openshift.io/vcs-uri: https://github.com/torjc01/csr-generator.git
+      app.openshift.io/vcs-uri: ${GITHUB_REPOSITORY_URI}
       template.alpha.openshift.io/wait-for-ready: "true"
     labels:
-      app: csr-controller
-    name: csr-controller
+      app: ${APP_NAME}
+      app.kubernetes.io/part-of: ${APP_GROUP}
+    name: ${APP_NAME}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: csr-controller:latest
+        name: ${APP_NAME}:latest
     source:
-      contextDir: CSR
+      contextDir: ${CONTEXT_SOURCE_DIR}
       git:
-        uri: https://github.com/torjc01/csr-generator.git
-        ref: prod
+        uri: ${GITHUB_REPOSITORY_URI}
+        ref: ${GIT_REF}
       type: Git
     strategy:
       dockerStrategy:
@@ -45,9 +48,9 @@ objects:
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: csr-controller
+    name: ${APP_NAME}
     labels:
-      app: csr-controller
+      app: ${APP_NAME}
       app.kubernetes.io/part-of: CSR
   spec:
     strategy:
@@ -70,22 +73,23 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - csr-controller
+            - ${APP_NAME}
           from:
             kind: ImageStreamTag
-            name: "csr-controller:latest"
+            name: "${APP_NAME}:latest"
     replicas: 1
     revisionHistoryLimit: 10
     test: false
     selector:
-      app: csr-controller
+      app: ${APP_NAME}
     template:
       metadata:
         labels:
-          app: csr-controller
+          app: ${APP_NAME}
+          app.kubernetes.io/part-of: ${APP_GROUP} 
       spec:
         containers:
-          - name: csr-controller
+          - name: ${APP_NAME}
             image: " "
             ports:
               - containerPort: 3000
@@ -102,10 +106,13 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: csr-controller
+    name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}
+      app.kubernetes.io/part-of: ${APP_GROUP}
   spec:
     selector:
-      app: csr-controller
+      app: ${APP_NAME}
     ports:
       - name: "3000"
         protocol: TCP
@@ -114,12 +121,15 @@ objects:
 - kind: Route
   apiVersion: v1
   metadata:
-    name: csr-controller
+    name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}
+      app.kubernetes.io/part-of: ${APP_GROUP}
   spec:
-    host: csr-controller.apps.exp.openshift.cqen.ca
+    host: ${APP_NAME}.apps.exp.openshift.cqen.ca
     to:
       kind: Service
-      name: csr-controller
+      name: ${APP_NAME}
       weight: 100
     port:
       targetPort: 3000
@@ -129,10 +139,39 @@ objects:
     wildcardPolicy: None
   status:
     ingress:
-      - host: csr-controller.apps.exp.openshift.cqen.ca 
+      - host: ${APP_NAME}.apps.exp.openshift.cqen.ca 
         routerName: default
         conditions:
           - type: Admitted
             status: "True"
         wildcardPolicy: None
         routerCanonicalHostname: apps.exp.openshift.cqen.ca
+######################################################################
+# Parameters
+######################################################################
+parameters:
+- name: APP_GROUP
+  displayName: App Group
+  description: Used to group components together.
+  required: true
+  value: 'ICP-XRoad' 
+- name: APP_NAME
+  displayName: Application name
+  description: Used to group components together in the OpenShift console.
+  required: true
+  value: 'csr-controller'
+- name: GITHUB_REPOSITORY_URI
+  displayName: GitHub repository URI
+  description: URI of the GitHub repository.
+  required: true
+  value: https://github.com/torjc01/csr-generator.git
+- name: CONTEXT_SOURCE_DIR
+  displayName: Context source dir
+  description: Répertoire ou sont les elements pour le build (notamment Dockerfile).
+  required: false
+  value: CSR
+- name: GIT_REF
+  displayName: Git reference
+  description: Dénomination de la branche que sera utilisée pour le build.
+  required: true
+  value: prod
