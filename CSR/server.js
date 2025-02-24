@@ -21,7 +21,7 @@ app.post('/generate-csr', (req, res) => {
     let country= "CA";
     
     // Generate CSR and Private Key
-    const opensslCommand = `openssl req -new -newkey rsa:${keySize} -nodes -keyout /app/private.key -out /app/csr.pem -subj "/C=${country}/ST=${state}/L=${city}/O=${organization}/OU=${organizationalUnit}/CN=${commonName}/emailAddress=${email}"`;
+    const opensslCommand = `openssl req -new -newkey rsa:${keySize} -nodes -keyout /app/private.key -out /app/csr.pem -subj "/C=${country}/ST=${state}/L=${city}/O=${organization}/OU=${organizationalUnit}/CN=${commonName}"`;
     
     exec(opensslCommand, (error, stdout, stderr) => {
         if (error) {
