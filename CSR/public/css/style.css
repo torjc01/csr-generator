@@ -105,3 +105,11 @@ pre {
     opacity: 0.8;
     text-decoration: underline !important;
 }
+
+.tablehead-xroad {
+    padding: .5rem 1rem;
+    margin-bottom: 0;
+    background-color: #673ddb;
+    border-bottom: 1px solid #673ddb;
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+}
